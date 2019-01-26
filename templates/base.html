@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html" charset="gb2312">
+<link href = "/static/style.css" rel = "stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="/static/stylePlayer.css" />
+<title>Dynamic Music</title>
+</head>
+<body>
+<div id = "allcontainer">
+    <div id = "header">
+        <div id="title">
+            <div id="sitetitle">
+                Dynamic
+                <span>
+                    Music
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div id = "banner">
+        <div id = "banner_text">
+            <div id = "banner_title">
+                Welcome To Dynamic Music Player
+            </div>
+            <p>
+                That music always round me, unceasing, unbeginning, yet long
+                <br>
+                Untaught I did not hear
+                <br>
+                But now the chorus I hear and am elated
+                <br>
+                A tenor, strong, ascending with power and health, with glad notes of
+                <br>
+                Daybreak I hear
+                <br>
+                Enjoy the most beautiful music
+                <br>
+                In this world
+            </p>
+        </div>
+    </div>
+
+    <div id="menu">
+        <ul>
+            <li><a href="{{url_for('index')}}">Popular</a></li>
+            <li><a href="{{url_for('soso')}}">General</a> </li>
+            <li><a href="{{url_for('search')}}">Search</a> </li>
+        </ul>
+    </div>
+
+    <div id="content">
+
+        <div id="left_column">
+
+            <h2>
+                Music Player
+            </h2>
+            {% block audio %}{% endblock %}
+            <h2>
+                Website Entries
+            </h2>
+            <div class="left_col_box">
+                <div class="blog_box">
+                    <h3>
+                        <a href="https://music.163.com/">NetEase cloud music Link </a>
+                    </h3>
+                        You can go to NetEase cloud music by clicking <a href="https://music.163.com/">here. </a><br />
+                </div>
+                <div class="blog_box">
+                    <h3>
+                        <a href="http://music.taihe.com">Thousands of music Link</a>
+                    </h3>
+                        You can go to Thousands of music Website by clicking <a href="http://music.taihe.com">here. </a><br />
+                </div>
+                <div class="blog_box">
+                    <h3>
+                        <a href="http://www.cad.zju.edu.cn/home/zhx/DAM/2018/doku.php">DAM Course Website</a>
+                    </h3>
+                        You can go to DAM Course Website by clicking <a href="http://www.cad.zju.edu.cn/home/zhx/DAM/2018/doku.php">here. </a><br />
+                </div>
+            </div>
+        </div>
+        {% block body %}{% endblock %}
+    </div>
+    <div id="footer">
+        Copyright 2018 <strong>Wei Chendi</strong> | Course <strong>DAM</strong>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+
+</body>
+</html>

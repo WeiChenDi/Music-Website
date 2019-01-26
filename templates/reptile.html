@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block audio %}
+    <div class="containerPlayer">
+        <div class="playerPlayer">
+            <div style="position: relative;">
+                <div style="position: absolute; right: 30px; bottom: 17px;">
+                    <div class="yj">
+                        <img id="recorder" src="/static/scrape/{{textInfo[0][0]}}.png" class="stoprotate"/>
+                    </div>
+                </div>
+                 <div class="yj">
+                     <img src="/static/images/record.png"  width="168" height="168" style="border: 0;"/>
+                 </div>
+            </div>
+        </div>
+        <div class="container">
+            <div id="audio-player">
+
+                <div id="playingAudio">
+                    {{textInfo[0][0]}}
+                </div>
+                <br>
+                <div id="playingArtist">
+                    {{textInfo[0][1]}}
+                </div>
+
+                <br>
+                <div id="buttons">
+                    <span>
+                        <button id="prev"></button>
+                        <button id="play" style="left: 30px;"></button>
+                        <button id="pause"></button>
+                        <button id="next"></button>
+                        <button id="stop"></button>
+                        <button id="vol"></button>
+                        <input id="volume" type="range" min="0" max="10" value="10">
+                    </span>
+                </div>
+                <div class="clearfix"></div>
+                <div id="tracker">
+                    <span id="duration">0:00</span>
+                    <div id="progress-bar">
+                        <div id = "progress"></div>
+                        <div id = "progress-button"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <br>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div id = "right_column">
+        <div id="new_released_section">
+            <h1>Searched Musics</h1>
+            {% for i in range(0, num) %}
+                <div class="new_released_box">
+                    <img id="img{{i}}"  src="{{img[i]}}" alt="image" />
+                    <h3 id = "name{{i}}">{{textInfo[i][0]}}</h3>
+                    <h5 id = "player{{i}}">{{textInfo[i][1]}}</h5>
+                    <h4 id={{i}}> <a href="javascript:void(0);">播放</a></h4>
+                    <div class="rantsection">
+                        <img id="1star{{i}}" src = "/static/images/yellowstar.gif" alt="star" />
+                        <img id="2star{{i}}" src = "/static/images/yellowstar.gif" alt="star" />
+                        <img id="3star{{i}}" src = "/static/images/yellowstar.gif" alt="star" />
+                        <img id="4star{{i}}" src = "/static/images/yellowstar.gif" alt="star" />
+                        <img id="5star{{i}}" src = "/static/images/yellowstar.gif" alt="star" />
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+<script>
+    var curMusic = 0;
+    var musicNum = {{num|tojson}};
+    var first = {{textInfo[0][0]|tojson}};
+    var firstSrc = 'static/scrape/'+first+'.mp3';
+    var audio = new Audio(firstSrc);
+    var pageNum = 1;
+    var musicInfo = {{textInfo|tojson}};
+    var i=0;
+    var arr = new Array();
+    for(var i=0; i<2; i++)
+    {
+        arr[i] = new Array();
+    }
+    audio.id = "MusicPlayer";
+    $('#pause').hide();
+
+    $('#play').click(function()
+    {
+        audio.play();
+        $('#play').hide();
+        $('#pause').show();
+        showDuration();
+        document.getElementById("recorder").className = "rotate";
+    });
+
+    $('#pause').click(function()
+    {
+        audio.pause();
+        document.getElementById("recorder").className = "stoprotate";
+        $('#play').show();
+        $('#pause').hide();
+    });
+
+    $('#stop').click(function()
+    {
+        audio.pause();
+        $('#play').show();
+        $('#pause').hide();
+        audio.currentTime = 0;
+        document.getElementById("recorder").className = "stoprotate";
+    });
+
+    $('#next').click(function()
+    {
+        if(curMusic<musicNum-1)
+        {
+            curMusic+=1;
+            changeText(curMusic);
+            var newMusicSrc = 'static/scrape/' + musicInfo[curMusic][0] + '.mp3';
+            var newImageSrc = 'static/scrape/' + musicInfo[curMusic][0] + '.png';
+            audio.src = newMusicSrc;
+            document.getElementById("recorder").src = newImageSrc;
+            audio.play();
+            $('#play').hide();
+            $('#pause').show();
+            showDuration();
+            document.getElementById("recorder").className = "rotate";
+        }
+        else
+        {
+            alert("This is the last song of this page!");
+        }
+    });
+
+    $('#prev').click(function()
+    {
+        if(curMusic>0)
+        {
+            curMusic-=1;
+            changeText(curMusic);
+            var newMusicSrc = 'static/scrape/' + musicInfo[curMusic][0] + '.mp3';
+            var newImageSrc = 'static/scrape/' + musicInfo[curMusic][0] + '.png';
+            audio.src = newMusicSrc;
+            document.getElementById("recorder").src = newImageSrc;
+            audio.play();
+            $('#play').hide();
+            $('#pause').show();
+            showDuration();
+            document.getElementById("recorder").className = "rotate";
+        }
+        else
+        {
+            alert("This is the last song of this page!");
+        }
+    })
+
+    function changeText(s)
+    {
+        document.getElementById("playingAudio").innerHTML = musicInfo[s][0];
+        document.getElementById("playingArtist").innerHTML = musicInfo[s][1];
+    }
+
+    $('#volume').change(function()
+    {
+        audio.volume = parseFloat(this.value / 10);
+    });
+
+    function showDuration()
+    {
+        $(audio).bind('timeupdate',function()
+        {
+            var s=parseInt(audio.currentTime % 60);
+            var m=parseInt(audio.currentTime / 60) % 60;
+            if(s < 10)
+            {
+                s = '0' + s;
+            }
+            $('#duration').html(m + ':' + s);
+            var value = 0;
+            if(audio.currentTime > 0)
+            {
+                value = Math.floor((100 / audio.duration) * audio.currentTime);
+            }
+            $('#progress').css('width', value+'%');
+            if(audio.currentTime == audio.duration)
+            {
+                audio.pause();
+                $('#play').show();
+                $('#pause').hide();
+                document.getElementById("recorder").className = "stoprotate";
+            }
+        });
+    }
+
+    var slider=(function()
+    {
+        init=function()
+        {
+            var wrapper=document.getElementById('progress-bar');
+            var slider=document.getElementById('progress-button');
+            var fill=document.getElementById('progress');
+            move(wrapper,slider,fill);
+        };
+        move=function(dom1,dom2,dom3)
+        {
+            var drag=0;
+            dom1.addEventListener('click',function (e)
+            {
+                if(e.target===dom2)
+                {
+                }
+                else
+                {
+                    if(e.offsetX>120)
+                    {
+                        dom2.style.left='180px';
+                        dom3.style.width='180px';
+                    }
+                    else if(e.offsetX<0)
+                    {
+                        dom2.style.left='0px';
+                        dom3.style.width='0px';
+                    }
+                    else
+                    {
+                        dom2.style.left=e.offsetX+'px';
+                        dom3.style.width=e.offsetX+'px';
+                    }
+                    audio.currentTime = (e.offsetX/120.0) * audio.duration;
+                }
+            });
+        };
+
+        return {
+            init:init
+        };
+    })();
+
+    slider.init();
+</script>
+
+<script>
+    {% for song in music %}
+        $('h4').click(function(){
+            var str = $(this).attr("id");
+            var i=parseInt(str);
+            curMusic = i;
+            changeText(i);
+            audio.src="static/scrape/"+musicInfo[i][0]+".mp3";
+            document.getElementById("recorder").src = "static/scrape/"+musicInfo[i][0]+".png";
+            audio.play();
+            $('#play').hide();
+            $('#pause').show();
+            showDuration();
+            document.getElementById("recorder").className = "rotate";
+            return false;
+        });
+    {% endfor %}
+</script>
+
+{% endblock %}

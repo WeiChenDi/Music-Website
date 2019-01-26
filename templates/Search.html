@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block audio %}
+{% endblock %}
+
+{% block body %}
+
+<div id = "right_column">
+    <div id="new_released_section">
+        <h1>Search Music</h1>
+        <h3>Please input the name of song you are lookinig for:</h3>
+        <form method="POST" name = "search">
+            <input id="searchBlock" type="text" placeholder="Song Name" name="search">
+            <br>
+            <br>
+            <br>
+            <input id="buttonSubmit" type="submit" value="submit">
+        </form>
+    </div>
+</div>
+{% endblock %}
